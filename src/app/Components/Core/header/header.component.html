@@ -1,0 +1,8 @@
+<mat-toolbar color="primary">
+  <span>{{Title}}</span>
+  <span class="example-spacer"></span>
+  <mat-form-field appearance="outline">
+    <mat-label>Search by ID</mat-label>
+    <input   matInput (input)="onSearch($event)" placeholder="Enter ID" />
+  </mat-form-field>
+</mat-toolbar>
