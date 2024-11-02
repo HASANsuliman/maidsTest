@@ -1,29 +1,33 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-
+import { UserDetail } from '../../../Models/User';
 import { UserService } from '../../../Services/User/user.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-interface UserDetail {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  avatar: string;
-}
+import { trigger, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-user-details',
   standalone: true,
   imports: [CommonModule, MatCardModule, MatButtonModule],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
+  animations: [
+    trigger('expandCollapse', [
+      transition(':enter', [
+        style({ height: 0, opacity: 0 }),
+        animate('0.3s ease-out', style({ height: '*', opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('0.3s ease-in', style({ height: 0, opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class UserDetailsComponent {
   user: UserDetail | null = null;
-
-
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
@@ -44,6 +48,7 @@ export class UserDetailsComponent {
   }
 
   goBack() {
+
     this.location.back();
   }
 }

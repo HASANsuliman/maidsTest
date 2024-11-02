@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { userAdapter, initialState, UserState } from './state';
+import { userAdapter, initialState } from './state';
 import * as UserActions from './action';
 
 export const userReducer = createReducer(
@@ -9,6 +9,8 @@ export const userReducer = createReducer(
     userAdapter.setAll(users, { ...state, loading: false, currentPage: page })
   ),
   on(UserActions.loadUsersFailure, (state) => ({ ...state, loading: false })),
-  // on(UserActions.selectUser, (state, { userId }) => ({ ...state, selectedUserId: userId })),
-  // on(UserActions.clearSelectedUser, (state) => ({ ...state, selectedUserId: null }))
+  on(UserActions.selectUser, (state, { userId }) => ({
+    ...state,
+    selectedUserId: userId,
+  }))
 );

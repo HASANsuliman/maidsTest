@@ -7,7 +7,6 @@ import {
   provideHttpClient,
   withInterceptors,
 } from '@angular/common/http';
-import { loaderInterceptorInterceptor } from './Services/Helpers/loader-interceptor.interceptor';
 import { provideEffects } from '@ngrx/effects';
 import {  provideStore } from '@ngrx/store';
 import { UserEffects } from './State/effect';
@@ -18,11 +17,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
 
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(withInterceptors([loaderInterceptorInterceptor])),
+    provideHttpClient(),
     provideAnimationsAsync(),
     provideEffects(UserEffects),
     provideStore({ users: userReducer }),
-    // provideEffects([EffectsModule]),
-    //{ provide: HTTP_INTERCEPTORS, useValue: loaderInterceptorInterceptor, multi: true },
+
   ],
 };

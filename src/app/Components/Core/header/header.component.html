@@ -3,6 +3,14 @@
   <span class="example-spacer"></span>
   <mat-form-field appearance="outline">
     <mat-label>Search by ID</mat-label>
-    <input   matInput (input)="onSearch($event)" placeholder="Enter ID" />
+    <input #search matInput (input)="onSearch($event)" placeholder="Enter ID" />
   </mat-form-field>
+
+  <div *ngIf="userSubj">
+    <div class="user" *ngFor="let item of userSubj | async" (click)="goToUserDetails(item.id) ;search.value=''">
+      <p>{{item.first_name}} {{item.last_name}}</p>
+      <img [src]="item.avatar" alt="user avatar" class="avatar-img" />
+    </div>
+
+  </div>
 </mat-toolbar>

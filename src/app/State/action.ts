@@ -6,7 +6,6 @@ export const loadUsersSuccess = createAction('[User] Load Users Success', props<
 export const loadUsersFailure = createAction('[User] Load Users Failure', props<{ error: string }>());
 
 export const selectUser = createAction('[User] Select User', props<{ userId: number }>());
-export const clearSelectedUser = createAction('[User] Clear Selected User');
 
 
 

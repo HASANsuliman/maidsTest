@@ -1,35 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { User } from '../../State/state';
-interface UserResponse {
-  page: number;
-  per_page: number;
-  total: number;
-  total_pages: number;
-  data: User[];
-}
-interface UserDetail {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  avatar: string;
-}
+import { Observable, of, tap } from 'rxjs';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
-
 export class UserService {
-  private apiUrl = 'https://reqres.in/api/users';
+  private cache = new Map<string, any>();
+
 
   constructor(private http: HttpClient) {}
 
-  getUsers(page: number): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${this.apiUrl}?page=${page}`);
+  getUsers(page: number): Observable<any> {
+    const url = `https://reqres.in/api/users?page=${page}`;
+    if (this.cache.has(url)) {
+      return of(this.cache.get(url));
+    }
+    return this.http.get(url).pipe(tap((data) => this.cache.set(url, data)));
   }
-  getUserDetail(id: number): Observable<{ data: UserDetail }> {
-    return this.http.get<{ data: UserDetail }>(`${this.apiUrl}/${id}`);
+  getUserDetail(id: number): Observable<any> {
+    const url = `https://reqres.in/api/users/${id}`;
+    if (this.cache.has(url)) {
+      return of(this.cache.get(url));
+    }
+    return this.http.get(url).pipe(tap((data) => this.cache.set(url, data)));
   }
 }

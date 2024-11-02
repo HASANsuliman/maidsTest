@@ -1,51 +1,17 @@
-<div *ngIf="loading$ | async" class="loading-indicator">
-  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-</div>
-
+<app-loader *ngIf="loading$|async"></app-loader>
 <mat-card>
-  <mat-card-title>User List</mat-card-title>
-  <mat-card-content>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let user"> {{ user.id }} </td>
-      </ng-container>
+  <div class="user" *ngFor="let user of users$ | async" (click)="goToUserDetails(user.id)" appHighlight  @fadeIn>
+    <h4> {{ user.id }}</h4>
+    <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+    <h4>{{ user.email }} </h4>
+    <img [src]="user.avatar" alt="user avatar" class="avatar-img" />
+  </div>
 
-      <ng-container matColumnDef="firstName">
-        <th mat-header-cell *matHeaderCellDef> First Name </th>
-        <td mat-cell *matCellDef="let user"> {{ user.first_name }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="lastName">
-        <th mat-header-cell *matHeaderCellDef> Last Name </th>
-        <td mat-cell *matCellDef="let user"> {{ user.last_name }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="avatar">
-        <th mat-header-cell *matHeaderCellDef> Avatar </th>
-        <td mat-cell *matCellDef="let user">
-          <img [src]="user.avatar" alt="{{ user.first_name }}" class="avatar-img" />
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let user"
-        (click)="onSelectUser(user.id)"
-        class="user-row"
-      ></tr>
-    </table>
-  </mat-card-content>
 </mat-card>
-
-<mat-paginator
-  [pageSize]="6"
-  (page)="onPageChange($event.pageIndex + 1)"
->
-</mat-paginator>
+<div class="paging">
+  <i class="material-icons" (click)="Backward()" >chevron_left</i>
+  <span>
+    {{page}}
+  </span>
+  <i class="material-icons" (click)="Forward()">chevron_right</i>
+</div>

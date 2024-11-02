@@ -1,14 +1,22 @@
-import { Component, inject } from '@angular/core';
-import { UserService } from '../../../Services/User/user.service';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectAllUsers, selectLoading, selectCurrentPage } from '../../../State/selector';
+import {
+  selectAllUsers,
+  selectCurrentPage,
+  selectLoading,
+} from '../../../State/selector';
 import * as UserActions from '../../../State/action';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import { Observable } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
+import { LoaderComponent } from '../../Core/loader/loader.component';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { HighlightDirective } from '../../../Services/Helpers/highlight.directive';
 
 interface User {
   id: number;
@@ -19,38 +27,49 @@ interface User {
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule,MatProgressSpinnerModule,MatCardModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatIconModule,
+    LoaderComponent,
+    HighlightDirective,
+  ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1s ease-out', style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
-export class UserListComponent {
-  store =inject(Store)
-
-  dataSource = new MatTableDataSource<User>([]);
-  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'avatar'];
-
-
+export class UserListComponent implements OnInit {
+  constructor(private store: Store, private router: Router) {}
+  page: number = 1;
+  users$: Observable<any> = this.store.select(selectAllUsers);
+  currentPage$ = this.store.select(selectCurrentPage).subscribe((page) => {
+    this.page = page;
+  });
   loading$ = this.store.select(selectLoading);
-  currentPage$ = this.store.select(selectCurrentPage);
-  constructor(private userService: UserService, private router: Router,) {}
-
-  ngOnInit() {
-    // Dispatch the action to load users for the first page
-    this.store.dispatch(UserActions.loadUsers({ page: 1 }));
-
-    // Subscribe to the users$ observable to update the dataSource
-    this.store.select(selectAllUsers).subscribe((users) => {
-      if (users) {
-        this.dataSource.data = users;
-      }
-    });
+  ngOnInit(): void {
+    this.store.dispatch(UserActions.loadUsers({ page: this.page }));
   }
- 
-  onPageChange(page: number) {
-    this.store.dispatch(UserActions.loadUsers({ page }));
+  Forward() {
+    this.page += 1;
+    this.store.dispatch(UserActions.loadUsers({ page: this.page }));
+  }
+  Backward() {
+    this.page -= 1;
+    this.store.dispatch(UserActions.loadUsers({ page: this.page }));
   }
 
-  onSelectUser(userId: number) {
-    this.store.dispatch(UserActions.selectUser({ userId }));
+  goToUserDetails(id: number) {
+    this.router.navigate(['/users', id]);
+    this.store.dispatch(UserActions.selectUser({ userId: id }));
   }
 }

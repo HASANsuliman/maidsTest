@@ -19,5 +19,5 @@ export const userAdapter = createEntityAdapter<User>();
 export const initialState: UserState = userAdapter.getInitialState({
   loading: false,
   selectedUserId: null,
-  currentPage: 1
+  currentPage: 1,
 });
