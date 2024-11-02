@@ -20,5 +20,15 @@ export class UserEffects {
       )
     )
   );
-
+  loadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.selectUser),
+      mergeMap(action =>
+        this.userService.getUsers(action.userId).pipe(
+          map(response => UserActions.selectUserSucces({ users: response.data})),
+          catchError(error => of(UserActions.selectUserFailure({ error: error.message })))
+        )
+      )
+    )
+  );
 }
