@@ -31,9 +31,11 @@ export class HeaderComponent {
 
   onSearch(event: any): void {
     const id = event.target.value;
-    this.store.select(selectAllUsers).subscribe((user) => {
-      this.userSubj.next([...user.filter((x) => x.id == id)]);
-    });
+    if (id) {
+      this.store.select(selectAllUsers).subscribe((user) => {
+        this.userSubj.next(user.filter((x) => x.id == id));
+      });
+    }
   }
   goToUserDetails(id: number) {
     this.router.navigate(['/users', id]);

@@ -6,7 +6,7 @@
     <input #search matInput (input)="onSearch($event)" placeholder="Enter ID" />
   </mat-form-field>
 
-  <div *ngIf="userSubj">
+  <div *ngIf="userSubj && search.value">
     <div class="user" *ngFor="let item of userSubj | async" (click)="goToUserDetails(item.id) ;search.value=''">
       <p>{{item.first_name}} {{item.last_name}}</p>
       <img [src]="item.avatar" alt="user avatar" class="avatar-img" />
