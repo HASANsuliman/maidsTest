@@ -40,6 +40,6 @@ export class HeaderComponent {
   goToUserDetails(id: number) {
     this.router.navigate(['/users', id]);
     this.userSubj.next([]);
-    this.store.dispatch(UserActions.selectUser({ userId: id }));
+    // this.store.dispatch(UserActions.selectUser({ userId: id }));
   }
 }

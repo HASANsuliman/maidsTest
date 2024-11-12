@@ -70,6 +70,6 @@ export class UserListComponent implements OnInit {
 
   goToUserDetails(id: number) {
     this.router.navigate(['/users', id]);
-    this.store.dispatch(UserActions.selectUser({ userId: id }));
+    // this.store.dispatch(UserActions.selectUser({ userId: id }));
   }
 }

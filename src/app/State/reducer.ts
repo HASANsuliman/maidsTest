@@ -19,8 +19,4 @@ export const userReducer = createReducer(
   on(UserActions.selectUserSucces, (state, { users }) =>
     userAdapter.setAll(users, { ...state, loading: false })
   ),
-  on(UserActions.selectUserSucces, (state) => ({ ...state, loading: false })),
-
-
-
 );
