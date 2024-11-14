@@ -4,11 +4,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  selectAllUsers,
-  selectCurrentPage,
-  selectLoading,
-} from '../../../State/selector';
+import { selectAllUsers, selectLoading } from '../../../State/selector';
 import * as UserActions from '../../../State/action';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
@@ -49,13 +45,11 @@ interface User {
   ],
 })
 export class UserListComponent implements OnInit {
-  constructor(private store: Store, private router: Router) {}
   page: number = 1;
-  users$: Observable<any> = this.store.select(selectAllUsers);
-  currentPage$ = this.store.select(selectCurrentPage).subscribe((page) => {
-    this.page = page;
-  });
-  loading$ = this.store.select(selectLoading);
+  users$: Observable<any[]> = this.store.select(selectAllUsers);
+  loading$: Observable<boolean> = this.store.select(selectLoading);
+  constructor(private store: Store, private router: Router) {}
+
   ngOnInit(): void {
     this.store.dispatch(UserActions.loadUsers({ page: this.page }));
   }
@@ -70,6 +64,5 @@ export class UserListComponent implements OnInit {
 
   goToUserDetails(id: number) {
     this.router.navigate(['/users', id]);
-    // this.store.dispatch(UserActions.selectUser({ userId: id }));
   }
 }

@@ -1,20 +1,27 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AsyncPipe, Location } from '@angular/common';
-import { UserDetail } from '../../../Models/User';
 import { UserService } from '../../../Services/User/user.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LoaderComponent } from '../../Core/loader/loader.component';
-import { selectLoading } from '../../../State/selector';
+import { selectLoading, selectSelectedUser } from '../../../State/selector';
 import { Store } from '@ngrx/store';
+import * as UserActions from '../../../State/action';
+import { User } from '../../../Models/User';
 
 @Component({
   selector: 'app-user-details',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, LoaderComponent,AsyncPipe],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    LoaderComponent,
+    AsyncPipe,
+  ],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
   animations: [
@@ -30,7 +37,7 @@ import { Store } from '@ngrx/store';
   ],
 })
 export class UserDetailsComponent {
-  user: UserDetail | null = null;
+  user: User | null = null;
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
@@ -38,18 +45,14 @@ export class UserDetailsComponent {
     private store: Store
   ) {}
   loading$ = this.store.select(selectLoading);
-
+  User$ = this.store.select(selectSelectedUser);
   ngOnInit() {
-    const userId = this.route.snapshot.paramMap.get('id');
+    //we can get it from store too
+    const userId = Number(this.route.snapshot.paramMap.get('id'));
     if (userId) {
-      this.fetchUserDetail(+userId);
+      this.store.dispatch(UserActions.selectUser({ userId: userId }))!;
+      this.User$.subscribe((x) => (this.user = x));
     }
-  }
-
-  fetchUserDetail(id: number) {
-    this.userService.getUserDetail(id).subscribe((response) => {
-      this.user = response.data;
-    });
   }
 
   goBack() {

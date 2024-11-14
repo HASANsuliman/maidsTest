@@ -1,23 +1,22 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
+import { User } from '../Models/User';
 
-export interface User {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  avatar: string;
+
+
+export interface UserState {
+  users: User[]; // Array of users
+  user: User | null;
+  loading: boolean; // Loading state
+  error: any; // Error state
+  selectedUserId: number | null; // Currently selected user ID
+  page: number; // Total count of users for pagination
 }
 
-export interface UserState extends EntityState<User> {
-  loading: boolean;
-  selectedUserId: number | null;
-  currentPage: number;
-}
-
-export const userAdapter = createEntityAdapter<User>();
-
-export const initialState: UserState = userAdapter.getInitialState({
+export const initialState: UserState = {
+  users: [],
+  user: null,
   loading: false,
+  error: null,
   selectedUserId: null,
-  currentPage: 1,
-});
+  page: 1,
+};

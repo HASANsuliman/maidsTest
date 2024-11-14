@@ -1,4 +1,4 @@
-<app-loader *ngIf="loading$|async"></app-loader>
+ <app-loader *ngIf="loading$|async"></app-loader> 
 <mat-card>
   <div class="user" *ngFor="let user of users$ | async" (click)="goToUserDetails(user.id)" appHighlight  @fadeIn>
     <h4> {{ user.id }}</h4>

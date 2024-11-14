@@ -24,8 +24,8 @@ export class UserEffects {
     this.actions$.pipe(
       ofType(UserActions.selectUser),
       mergeMap(action =>
-        this.userService.getUsers(action.userId).pipe(
-          map(response => UserActions.selectUserSucces({ users: response.data})),
+        this.userService.getUserDetail(action.userId).pipe(
+          map(response => UserActions.selectUserSucces({ user: response.data})),
           catchError(error => of(UserActions.selectUserFailure({ error: error.message })))
         )
       )
