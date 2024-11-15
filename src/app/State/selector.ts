@@ -28,3 +28,7 @@ export const selectSelectedUser = createSelector(
   selectUserState,
   (state) => state.user
 );
+export const totalPage = createSelector(
+  selectUserState,
+  (state) => state.totalPage
+);

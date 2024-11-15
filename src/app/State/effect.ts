@@ -14,7 +14,7 @@ export class UserEffects {
       ofType(UserActions.loadUsers),
       mergeMap(action =>
         this.userService.getUsers(action.page).pipe(
-          map(response => UserActions.loadUsersSuccess({ users: response.data, page: action.page })),
+          map(response => UserActions.loadUsersSuccess({ users: response.data, page: response.page,totalPage:response.total_pages })),
           catchError(error => of(UserActions.loadUsersFailure({ error: error.message })))
         )
       )

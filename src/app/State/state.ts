@@ -9,7 +9,8 @@ export interface UserState {
   loading: boolean; // Loading state
   error: any; // Error state
   selectedUserId: number | null; // Currently selected user ID
-  page: number; // Total count of users for pagination
+  page: number; 
+  totalPage:number
 }
 
 export const initialState: UserState = {
@@ -19,4 +20,6 @@ export const initialState: UserState = {
   error: null,
   selectedUserId: null,
   page: 1,
+  totalPage:0
+
 };

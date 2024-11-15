@@ -1,9 +1,6 @@
-
 import { createReducer, on } from '@ngrx/store';
 import * as UserActions from './action';
 import { initialState } from './state';
-
-
 
 export const userReducer = createReducer(
   initialState,
@@ -16,8 +13,10 @@ export const userReducer = createReducer(
   })),
 
   // Load Users Success
-  on(UserActions.loadUsersSuccess, (state, { users, page }) => ({
+  on(UserActions.loadUsersSuccess, (state, { users, totalPage, page }) => ({
     ...state,
+    totalPage: totalPage,
+    page: page,
     loading: false,
     users: users,
   })),

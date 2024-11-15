@@ -5,11 +5,13 @@
   cursor: pointer;
 
 }
-i{
+mat-icon{
   cursor: pointer;
 }
 .paging{
   display: flex;
   justify-content: center;
   gap: 2rem;
+  align-items: center;
+
 }

@@ -1,6 +1,6 @@
- <app-loader *ngIf="loading$|async"></app-loader> 
+<app-loader *ngIf="loading$|async"></app-loader>
 <mat-card>
-  <div class="user" *ngFor="let user of users$ | async" (click)="goToUserDetails(user.id)" appHighlight  @fadeIn>
+  <div class="user" *ngFor="let user of users$ | async" (click)="goToUserDetails(user.id)" appHighlight @fadeIn>
     <h4> {{ user.id }}</h4>
     <h4>{{ user.first_name }} {{ user.last_name }}</h4>
     <h4>{{ user.email }} </h4>
@@ -9,9 +9,14 @@
 
 </mat-card>
 <div class="paging">
-  <i class="material-icons" (click)="Backward()" >chevron_left</i>
+
+  <button mat-icon-button (click)="Backward()" [disabled]="page==1 ">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
   <span>
-    {{page}}
+    {{page$|async}}
   </span>
-  <i class="material-icons" (click)="Forward()">chevron_right</i>
+  <button mat-icon-button (click)="Forward()" [disabled]="page==totalPage">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
 </div>
