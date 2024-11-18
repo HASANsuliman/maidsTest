@@ -7,8 +7,8 @@ import { Store } from '@ngrx/store';
 import {
   selectAllUsers,
   selectLoading,
-  selectpage,
-  totalPage,
+  selectPage,
+  selectTotalPage,
 } from '../../../State/selector';
 import * as UserActions from '../../../State/action';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -19,7 +19,7 @@ import { LoaderComponent } from '../../Core/loader/loader.component';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { HighlightDirective } from '../../../Services/Helpers/highlight.directive';
 import { User } from '../../../Models/User';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-user-list',
@@ -32,7 +32,7 @@ import {MatButtonModule} from '@angular/material/button';
     MatIconModule,
     LoaderComponent,
     HighlightDirective,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
@@ -46,18 +46,22 @@ import {MatButtonModule} from '@angular/material/button';
   ],
 })
 export class UserListComponent implements OnInit {
-  page!: number ;
-  totalPage!: number ;
-  totalPage$: Observable<number> = this.store.select(totalPage);
-  page$: Observable<number> = this.store.select(selectpage);
+  page!: number;
+  totalPage!: number;
+  totalPage$: Observable<number> = this.store.select(selectTotalPage);
+  page$: Observable<number> = this.store.select(selectPage);
   users$: Observable<User[]> = this.store.select(selectAllUsers);
   loading$: Observable<boolean> = this.store.select(selectLoading);
   constructor(private store: Store, private router: Router) {}
 
   ngOnInit(): void {
-    this.page$.pipe(tap(x=>this.page=x), map((x) => this.store.dispatch(UserActions.loadUsers({ page: x })))).subscribe();
-    this.totalPage$.subscribe(res=> this.totalPage =res)
-    // this.store.dispatch(UserActions.loadUsers({ page: this.page }));
+    this.page$
+      .pipe(
+        tap((x) => (this.page = x)),
+        map((x) => this.store.dispatch(UserActions.loadUsers({ page: x })))
+      )
+      .subscribe();
+    this.totalPage$.subscribe((res) => (this.totalPage = res));
   }
   Forward() {
     this.page += 1;

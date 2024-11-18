@@ -51,7 +51,7 @@ export class UserDetailsComponent {
     const userId = Number(this.route.snapshot.paramMap.get('id'));
     if (userId) {
       this.store.dispatch(UserActions.selectUser({ userId: userId }))!;
-      this.User$.subscribe((x) => (this.user = x));
+      this.User$.subscribe((x:any) => (this.user = x));
     }
   }
 

@@ -1,50 +1,50 @@
 import { createReducer, on } from '@ngrx/store';
 import * as UserActions from './action';
-import { initialState } from './state';
+import { initialState, userAdapter } from './state';
 
 export const userReducer = createReducer(
   initialState,
-
   // Load Users
   on(UserActions.loadUsers, (state) => ({
     ...state,
     loading: true,
-    error: null,
   })),
 
   // Load Users Success
-  on(UserActions.loadUsersSuccess, (state, { users, totalPage, page }) => ({
-    ...state,
-    totalPage: totalPage,
-    page: page,
-    loading: false,
-    users: users,
-  })),
+  on(UserActions.loadUsersSuccess, (state, { users, totalPage, page }) =>
+    userAdapter.setAll(users, {
+      ...state,
+      loading: false,
+      page,
+      totalPage,
+    })
+  ),
 
   // Load Users Failure
   on(UserActions.loadUsersFailure, (state, { error }) => ({
     ...state,
     loading: false,
-    error: error,
+    error,
   })),
 
   // Select User
   on(UserActions.selectUser, (state, { userId }) => ({
     ...state,
-    loading: true,
     selectedUserId: userId,
+    loading: true,
   })),
 
+  // Load User Success
   on(UserActions.selectUserSucces, (state, { user }) => ({
     ...state,
     loading: false,
-    user: user,
+    user,
   })),
 
-  // Load Users Failure
+  // Select User Failure
   on(UserActions.selectUserFailure, (state, { error }) => ({
     ...state,
     loading: false,
-    error: error,
+    error,
   }))
 );

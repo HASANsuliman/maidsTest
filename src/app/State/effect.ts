@@ -8,14 +8,13 @@ import { of } from 'rxjs';
 @Injectable()
 export class UserEffects {
   constructor(private actions$: Actions, private userService: UserService) {}
-
   loadUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUsers),
       mergeMap(action =>
         this.userService.getUsers(action.page).pipe(
           map(response => UserActions.loadUsersSuccess({ users: response.data, page: response.page,totalPage:response.total_pages })),
-          catchError(error => of(UserActions.loadUsersFailure({ error: error.message })))
+          catchError(error => of(UserActions.loadUsersFailure({ error: error.message })))//if Exisit
         )
       )
     )
