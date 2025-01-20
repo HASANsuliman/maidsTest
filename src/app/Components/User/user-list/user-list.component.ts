@@ -58,6 +58,8 @@ export class UserListComponent implements OnInit {
     this.page$.pipe(tap(x=>this.page=x), map((x) => this.store.dispatch(UserActions.loadUsers({ page: x })))).subscribe();
     this.totalPage$.subscribe(res=> this.totalPage =res)
     // this.store.dispatch(UserActions.loadUsers({ page: this.page }));
+    // loading via script method script tag
+    // google insight
   }
   Forward() {
     this.page += 1;
